@@ -5,7 +5,7 @@ const readline = require('readline');
 const name = process.argv[2] || 'anon';
 
 const client = new Client({
-  brokerURL: 'ws://localhost:8080/chat',
+  brokerURL: 'ws://localhost:8081/chat',
   webSocketFactory: () => new WebSocket('ws://localhost:8080/chat'),
   onConnect: () => {
     console.log('--- Connected as ' + name + ' ---');
