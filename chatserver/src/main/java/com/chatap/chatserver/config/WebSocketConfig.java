@@ -6,8 +6,11 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-@Configuration
-@EnableWebSocket
+/* This File is now depreciated and no longer used do to the implemenation leading to the refactoring of the code using STOMP to pipeline the data
+throughout the web socket connection*/
+
+// @Configuration
+// @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer{
 
     private final ChatWebSocketHandler chatWebSocketHandler;
