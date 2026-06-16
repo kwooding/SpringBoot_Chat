@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import com.chatapp.chatserver.model.MessageEntity;
 import com.chatapp.chatserver.repository.MessageRepository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import java.util.List;
 
 @Service
@@ -65,6 +68,17 @@ public class MessageService{
                                 .stream()
                                 .map(entity -> new ChatMessage(entity.getSender(),entity.getContent(),entity.getTimestamp()))
                                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ChatMessage> getMessagePage(int page, int size){
+        Pageable p = PageRequest.of(page,size);
+        Page<MessageEntity> p_list = messageRepository.findAllByOrderByTimestampDesc(p);
+        return p_list.getContent()
+                    .stream()
+                    .map(entity -> new ChatMessage(entity.getSender(),entity.getContent(),entity.getTimestamp()))
+                    .toList();
+
     }
         
 }
