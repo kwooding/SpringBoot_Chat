@@ -34,7 +34,7 @@ public class UserEntity{
 
     }
 
-    public UserEntity(String username, String password_hash, String roles, Instant createdAt){
+    public UserEntity(String username, String passwordHash, String roles, Instant createdAt){
         this.username = username;
         this.passwordHash = passwordHash;
         this.roles = roles;
