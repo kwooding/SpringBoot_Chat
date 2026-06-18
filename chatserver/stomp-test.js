@@ -3,10 +3,14 @@ const WebSocket = require('ws');
 const readline = require('readline');
 
 const name = process.argv[2] || 'anon';
+const token = process.argv[3];
 
 const client = new Client({
   brokerURL: 'ws://localhost:8081/chat',
   webSocketFactory: () => new WebSocket('ws://localhost:8081/chat'),
+  connectHeaders: {
+    Authorization: 'Bearer ' + token
+  },
   onConnect: () => {
     console.log('--- Connected as ' + name + ' ---');
 
