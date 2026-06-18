@@ -5,6 +5,7 @@ import com.chatapp.chatserver.service.MessageService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import java.security.Principal;
 import java.time.Instant;
 
 @Controller
@@ -17,8 +18,10 @@ public class ChatController{
 
     @MessageMapping("/chat")
     @SendTo("/topic/messages")
-    public ChatMessage send(ChatMessage message){
-        ChatMessage stamped = new ChatMessage(message.sender(), message.content(), Instant.now());
+    public ChatMessage send(ChatMessage message, Principal principal){
+
+        //Using principal.getName instead of message.sender to make sure names are server enforced
+        ChatMessage stamped = new ChatMessage(principal.getName(), message.content(), Instant.now());
 
         messageService.save(stamped);
         return stamped;
