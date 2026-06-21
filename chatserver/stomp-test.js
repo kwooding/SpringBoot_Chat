@@ -4,10 +4,11 @@ const readline = require('readline');
 
 const name = process.argv[2] || 'anon';
 const token = process.argv[3];
+const port = process.argv[4] || '8081';
 
 const client = new Client({
-  brokerURL: 'ws://localhost:8081/chat',
-  webSocketFactory: () => new WebSocket('ws://localhost:8081/chat'),
+  brokerURL: 'ws://localhost:' + port + '/chat',
+  webSocketFactory: () => new WebSocket('ws://localhost:' + port + '/chat'),
   connectHeaders: {
     Authorization: 'Bearer ' + token
   },
