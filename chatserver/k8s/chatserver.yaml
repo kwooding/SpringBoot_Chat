@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatserver
+spec:
+  replicas: 2                      
+  selector:
+    matchLabels:
+      app: chatserver
+  template:
+    metadata:
+      labels:
+        app: chatserver
+    spec:
+      containers:
+        - name: chatserver
+          image: chatserver-app1:latest
+          imagePullPolicy: IfNotPresent   
+          ports:
+            - containerPort: 8081
+          env:
+            - name: DB_URL
+              value: jdbc:postgresql://postgres:5432/chatserver
+            - name: DB_USERNAME
+              value: postgres
+            - name: DB_PASSWORD
+              value: secret
+            - name: REDIS_HOST
+              value: redis
+            - name: REDIS_PORT
+              value: "6379"
+            - name: JWT_SECRET
+              value: ThisIsADevelopmentSecretKeyThisShouldBeLongerWhenItIsInProduction
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chatserver
+spec:
+  selector:
+    app: chatserver
+  ports:
+    - port: 8081
+      targetPort: 8081
