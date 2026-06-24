@@ -25,7 +25,7 @@ public class WebSocketAuthInterceptor implements ChannelInterceptor{
 
     // Instiated at the connect frame and starts authorization
     @Override
-    public Message<?> presend(Message<?> message, MessageChannel MessageChannel){
+    public Message<?> preSend(Message<?> message, MessageChannel MessageChannel){
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
         if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())){
