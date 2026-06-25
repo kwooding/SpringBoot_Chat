@@ -20,17 +20,56 @@ spec:
             - containerPort: 8081
           env:
             - name: DB_URL
-              value: jdbc:postgresql://postgres:5432/chatserver
+              valueFrom:
+                configMapKeyRef:
+                  name: chatserver-config
+                  key: DB_URL
             - name: DB_USERNAME
-              value: postgres
-            - name: DB_PASSWORD
-              value: secret
+              valueFrom:
+                configMapKeyRef:
+                  name: chatserver-config
+                  key: DB_USERNAME
             - name: REDIS_HOST
-              value: redis
+              valueFrom:
+                configMapKeyRef:
+                  name: chatserver-config
+                  key: REDIS_HOST
             - name: REDIS_PORT
-              value: "6379"
+              valueFrom:
+                configMapKeyRef:
+                  name: chatserver-config
+                  key: REDIS_PORT
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: chatserver-secret
+                  key: DB_PASSWORD
             - name: JWT_SECRET
-              value: ThisIsADevelopmentSecretKeyThisShouldBeLongerWhenItIsInProduction
+              valueFrom:
+                secretKeyRef:
+                  name: chatserver-secret
+                  key: JWT_SECRET
+          #Checking the liveliness and readiness wil chekc for 3 consective failures before restart
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8081
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8081
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8081
+            failureThreshold: 30
+            periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service
